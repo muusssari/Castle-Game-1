@@ -10,6 +10,7 @@ public class Unit_Movement : MonoBehaviour {
     public string enemy;
 	public Transform rotate;
 	public GameObject target;
+	public Vector3 offset;
 
 
     private void Start()
@@ -39,7 +40,7 @@ public class Unit_Movement : MonoBehaviour {
 		Vector3 dir = wayp.position - transform.position;
         transform.Translate(dir.normalized * speed * Time.deltaTime, Space.World);
 
-        if (Vector3.Distance(transform.position, wayp.position) <= 0.9f)
+        if (Vector3.Distance((transform.position + offset), wayp.position) <= 0.4f)
         {
             GetNextWaypoint();
         }

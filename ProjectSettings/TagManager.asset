@@ -5,10 +5,11 @@ TagManager:
   serializedVersion: 2
   tags:
   - Enemy
-  - Wall
   - Tower
   - TowerE
   - PlatformE
+  - Wall
+  - WallE
   layers:
   - Default
   - TransparentFX

@@ -11,12 +11,14 @@ public class Catapult_Shoot : MonoBehaviour {
 	public float range = 40f;
 	private float turnSpeed = 6f;
 	public float damage = 1f;
-	private string enemytag;
+	public string enemytag;
+	public string enemybase;
+	public string walltag;
 	public Transform rotate;
 	public float hitRate = 1;
 	private float hitCountdown = 0f;
 	public float update;
-	public Transform tower;
+	Animation pole;
 
 
 	void Start()
@@ -24,11 +26,17 @@ public class Catapult_Shoot : MonoBehaviour {
 		if (tag == "Enemy")
 		{
 			enemytag = "Tower";
+			enemybase = "PlayerBase";
+			walltag = "Wall";
 		}
 		else
 		{
+			walltag = "WallE";
 			enemytag = "TowerE";
+			enemybase = "EnemyBase";
+			
 		}
+		pole = gameObject.transform.Find("Catapult").gameObject.transform.Find("Pole").GetComponent<Animation>();
 
 		InvokeRepeating("UpdateTarget", 0f, 0.5f);
 	}
@@ -49,6 +57,7 @@ public class Catapult_Shoot : MonoBehaviour {
 			}
 			if (hitCountdown <= 0f && targetThing != null)
 			{
+				pole.Play("CatapultShoot");
 				Shoot();
 				hitCountdown = 1f / hitRate;
 			}
@@ -76,10 +85,22 @@ public class Catapult_Shoot : MonoBehaviour {
 	void UpdateTarget()
 	{
 		GameObject[] enemies = GameObject.FindGameObjectsWithTag(enemytag);
+		GameObject[] walls = GameObject.FindGameObjectsWithTag(walltag);
+		GameObject theenemybase = GameObject.Find(enemybase);
 		float shortestDistance = Mathf.Infinity;
 		GameObject nearestEnemy = null;
 		targetThing = null;
 
+		foreach (GameObject wall in walls)
+		{
+			float distanceToEnemy = Vector3.Distance(transform.position, wall.transform.position);
+			if (distanceToEnemy < shortestDistance)
+			{
+				shortestDistance = distanceToEnemy;
+				nearestEnemy = wall;
+			}
+		}
+		float distanceToBase = Vector3.Distance(transform.position, theenemybase.transform.position);
 		foreach (GameObject enemy in enemies)
 		{
 			float distanceToEnemy = Vector3.Distance(transform.position, enemy.transform.position);
@@ -89,6 +110,13 @@ public class Catapult_Shoot : MonoBehaviour {
 				nearestEnemy = enemy;
 			}
 		}
+
+		if (distanceToBase < shortestDistance)
+		{
+			shortestDistance = distanceToBase;
+			nearestEnemy = theenemybase;
+		}
+
 
 		if (nearestEnemy != null && shortestDistance <= range)
 		{

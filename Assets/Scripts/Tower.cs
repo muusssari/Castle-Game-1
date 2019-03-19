@@ -11,7 +11,7 @@ public class Tower : MonoBehaviour {
 
 	public void OnCollisionEnter(Collision col)
 	{
-		positionOffset = new Vector3(0f, 2.4f, 0f);
+		positionOffset = new Vector3(0f, 3f, 0f);
 		if (col.collider.tag == "Player" && col.collider.name == "Player_Unit_Archer(Clone)")
 		{
 			unit = col.collider.gameObject;

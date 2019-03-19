@@ -8,19 +8,20 @@ public class CameraControl : MonoBehaviour {
     private Vector3 pos;
     public float minY = 10f;
     public float maxY = 80f;
-    public bool moveCamera = true;
+    public bool moveCamera = false;
+	private float scrollSpeed;
 
-    void Awake()
+	void Awake()
     {
         pos = transform.position;
     }
     void Update () {
-        if (Input.GetKey(KeyCode.Escape))
+      /*  if (Input.GetKey(KeyCode.Escape))
         {
             moveCamera = !moveCamera;
         }
         if (!moveCamera)
-        {
+        { */
 
             if (Input.GetKey("space"))
             {
@@ -29,19 +30,34 @@ public class CameraControl : MonoBehaviour {
 
             if (Input.GetKey("w") || Input.mousePosition.y >= Screen.height - panBorderThickness)
             {
-                transform.Translate(Vector3.left * panSpeed * Time.deltaTime, Space.World);
+                if (transform.position.x > 10)
+                {
+                    transform.Translate(Vector3.left * panSpeed * Time.deltaTime, Space.World);
+                }
             }
             if (Input.GetKey("s") || Input.mousePosition.y <= panBorderThickness)
             {
-                transform.Translate(Vector3.right * panSpeed * Time.deltaTime, Space.World);
+            if (transform.position.x < 150)
+                {
+                    transform.Translate(Vector3.right * panSpeed * Time.deltaTime, Space.World);
+                }
+                
             }
             if (Input.GetKey("d") || Input.mousePosition.x > Screen.width - panBorderThickness)
             {
-                transform.Translate(Vector3.forward * panSpeed * Time.deltaTime, Space.World);
+                if (transform.position.z < 100)
+                {
+                    transform.Translate(Vector3.forward * panSpeed * Time.deltaTime, Space.World);
+                }
+                
             }
             if (Input.GetKey("a") || Input.mousePosition.x < panBorderThickness)
             {
-                transform.Translate(Vector3.back * panSpeed * Time.deltaTime, Space.World);
+                if (transform.position.z > -40)
+                {
+                    transform.Translate(Vector3.back * panSpeed * Time.deltaTime, Space.World);
+                }
+            
             }
 
             float scroll = Input.GetAxis("Mouse ScrollWheel");
@@ -52,12 +68,12 @@ public class CameraControl : MonoBehaviour {
             transform.position = poss; */
             if (scroll > 0 && transform.position.y > minY)
             {
-                transform.Translate(Vector3.forward * 150f * Time.deltaTime, Space.Self);
+                transform.Translate(Vector3.forward * 350f * Time.deltaTime, Space.Self);
             }
             if (scroll < 0 && transform.position.y < maxY)
             {
-                transform.Translate(Vector3.back * 150f * Time.deltaTime, Space.Self);
+                transform.Translate(Vector3.back * 350f * Time.deltaTime, Space.Self);
             }
-        }
+       // }
     }
 }

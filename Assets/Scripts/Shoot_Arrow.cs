@@ -13,6 +13,7 @@ public class Shoot_Arrow : MonoBehaviour {
 	private float turnSpeed = 6f;
 	public float damage = 1f;
 	private string enemytag;
+	public string walltag;
 	public Transform rotate;
 	private float hitRate = 1;
 	private float hitCountdown = 0f;
@@ -27,11 +28,13 @@ public class Shoot_Arrow : MonoBehaviour {
 		{
 			enemytag = "Player";
 			towertag = "TowerE";
-		}
+			walltag = "Wall";
+}
 		else
 		{
 			enemytag = "Enemy";
 			towertag = "Tower";
+			walltag = "WallE";
 		}
 		
 		InvokeRepeating("UpdateTarget", 0f, 0.5f);
@@ -67,6 +70,7 @@ public class Shoot_Arrow : MonoBehaviour {
 		else if (tower != null)
 		{
 			GetComponent<Unit_Movement>().enabled = false;
+			GetComponent<Rigidbody>().isKinematic = false;
 			Vector3 dire = (tower.position + tower.GetComponent<Tower>().positionOffset) - transform.position;
 			float distanceToTower = Vector3.Distance(transform.position, tower.transform.position);
 			if (distanceToTower >= 1.5f)
@@ -83,9 +87,11 @@ public class Shoot_Arrow : MonoBehaviour {
 			}
 			
 		}
+
 		else
 		{
 			GetComponent<Unit_Movement>().enabled = true;
+			GetComponent<Rigidbody>().isKinematic = true;
 		}
 	}
 
@@ -103,10 +109,20 @@ public class Shoot_Arrow : MonoBehaviour {
 	void UpdateTarget()
 	{
 		GameObject[] enemies = GameObject.FindGameObjectsWithTag(enemytag);
+		GameObject[] walls = GameObject.FindGameObjectsWithTag(walltag);
 		float shortestDistance = Mathf.Infinity;
 		GameObject nearestEnemy = null;
 		targetThing = null;
-		
+
+		foreach (GameObject wall in walls)
+		{
+			float distanceToEnemy = Vector3.Distance(transform.position, wall.transform.position);
+			if (distanceToEnemy < shortestDistance)
+			{
+				shortestDistance = distanceToEnemy;
+				nearestEnemy = wall;
+			}
+		}
 		foreach (GameObject enemy in enemies)
 		{
 			float distanceToEnemy = Vector3.Distance(transform.position, enemy.transform.position);
@@ -132,9 +148,11 @@ public class Shoot_Arrow : MonoBehaviour {
 	{
 
 		GameObject[] Towers = GameObject.FindGameObjectsWithTag(towertag);
+		
 		float shortestDistance = Mathf.Infinity;
 		GameObject nearestTower = null;
 
+		
 		foreach (GameObject tower in Towers)
 		{
 			if (tower.GetComponent<Tower>().Inside == false)

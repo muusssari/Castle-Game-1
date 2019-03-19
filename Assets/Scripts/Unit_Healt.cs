@@ -23,9 +23,10 @@ public class Unit_Healt : MonoBehaviour {
 	{
 		findimage = transform.Find("Canvas/Healtbg/HealtBar").gameObject;
 		canvas = transform.Find("Canvas").gameObject;
+		canvas.SetActive(false);
 		starthealt = healt;
 		HealtBar = findimage.GetComponent<Image>();
-		canvas.SetActive(false);
+		
 	}
 	void Update () {
 		if (healt < starthealt)
@@ -52,7 +53,7 @@ public class Unit_Healt : MonoBehaviour {
 	}
     public void GetHit(float damage)
     {
-        healt -= damage - (defenceShield * defenceArmor);
+        healt -= damage;
 		if (healt <= 0)
 		{
 			Destroy(gameObject);

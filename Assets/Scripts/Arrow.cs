@@ -12,11 +12,6 @@ public class Arrow : MonoBehaviour {
 	public GameObject targetThing;
 	private Transform targetpoint;
 
-	private void Start()
-	{
-		
-	}
-
 	public void Seek(Transform getTarget, GameObject getTargetThing)
 	{
 		targetThing = getTargetThing;
@@ -32,10 +27,8 @@ public class Arrow : MonoBehaviour {
 			return;
 		}
 
-		if (explosionRadius <= 0)
+		if (explosionRadius <= 0f)
 		{
-			
-
 			Vector3 dir = target.position - transform.position;
 			float distanceThisFrame = speed * Time.deltaTime;
 
@@ -87,13 +80,13 @@ public class Arrow : MonoBehaviour {
 	void Explode()
 	{
 		Collider[] colliders = Physics.OverlapSphere(transform.position, explosionRadius);
+		Debug.Log(colliders);
 		foreach (Collider collider in colliders)
 		{
-			if (collider.tag == "TowerE" || collider.tag == "Tower")
+			if (collider.tag == "TowerE" || collider.tag == "Tower" || collider.name == "EnemyBase" || collider.name == "PlayerBase" ||collider.tag == "Wall" || collider.tag == "WallE")
 			{
 				collider.GetComponent<Unit_Healt>().GetHit(damage);
 			}
-
 		}
 	}
 
